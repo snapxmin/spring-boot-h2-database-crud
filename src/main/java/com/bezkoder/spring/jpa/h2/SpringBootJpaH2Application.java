@@ -18,4 +18,7 @@ public class SpringBootJpaH2Application {
 	public int bar(){
 		return foo(1).length();
 	}
+	public int divideByZero(){
+		return 1/0;
+	}
 }
