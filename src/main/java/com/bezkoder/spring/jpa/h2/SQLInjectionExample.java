@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class SQLInjectionExample {
-    public static void main(String[] args) {
+    public static void test(String[] args) {
         String username = "user"; // 这个值通常是从用户输入中获取的
         String password = "pass"; // 这个值通常是从用户输入中获取的
 
