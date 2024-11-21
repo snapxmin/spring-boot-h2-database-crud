@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bezkoder.spring.jpa.h2.model.Tutorial;
 import com.bezkoder.spring.jpa.h2.repository.TutorialRepository;
+import com.bezkoder.spring.jpa.h2.service.TutorialService;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
@@ -28,6 +29,9 @@ public class TutorialController {
 
   @Autowired
   TutorialRepository tutorialRepository;
+
+  @Autowired
+  TutorialService tutorialService;
 
   @GetMapping("/tutorials")
   public ResponseEntity<List<Tutorial>> getAllTutorials(@RequestParam(required = false) String title) {
@@ -51,7 +55,7 @@ public class TutorialController {
 
   @GetMapping("/tutorials/{id}")
   public ResponseEntity<Tutorial> getTutorialById(@PathVariable("id") long id) {
-    Optional<Tutorial> tutorialData = tutorialRepository.findById(id);
+    Optional<Tutorial> tutorialData = tutorialService.getTutorialById(id);
 
     if (tutorialData.isPresent()) {
       return new ResponseEntity<>(tutorialData.get(), HttpStatus.OK);
@@ -88,7 +92,7 @@ public class TutorialController {
   @DeleteMapping("/tutorials/{id}")
   public ResponseEntity<HttpStatus> deleteTutorial(@PathVariable("id") long id) {
     try {
-      tutorialRepository.deleteById(id);
+      tutorialService.deleteTutorial(id);
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     } catch (Exception e) {
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
