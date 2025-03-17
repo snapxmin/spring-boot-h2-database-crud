@@ -21,14 +21,19 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bezkoder.spring.jpa.h2.model.Tutorial;
 import com.bezkoder.spring.jpa.h2.repository.TutorialRepository;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping("/api")
+@Api(value = "Tutorial Management System")
 public class TutorialController {
 
   @Autowired
   TutorialRepository tutorialRepository;
 
+  @ApiOperation(value = "View a list of available tutorials", response = List.class)
   @GetMapping("/tutorials")
   public ResponseEntity<List<Tutorial>> getAllTutorials(@RequestParam(required = false) String title) {
     try {
@@ -49,6 +54,7 @@ public class TutorialController {
     }
   }
 
+  @ApiOperation(value = "Get a tutorial by Id")
   @GetMapping("/tutorials/{id}")
   public ResponseEntity<Tutorial> getTutorialById(@PathVariable("id") long id) {
     Optional<Tutorial> tutorialData = tutorialRepository.findById(id);
@@ -60,6 +66,7 @@ public class TutorialController {
     }
   }
 
+  @ApiOperation(value = "Create a new tutorial")
   @PostMapping("/tutorials")
   public ResponseEntity<Tutorial> createTutorial(@RequestBody Tutorial tutorial) {
     try {
@@ -70,6 +77,7 @@ public class TutorialController {
     }
   }
 
+  @ApiOperation(value = "Update an existing tutorial")
   @PutMapping("/tutorials/{id}")
   public ResponseEntity<Tutorial> updateTutorial(@PathVariable("id") long id, @RequestBody Tutorial tutorial) {
     Optional<Tutorial> tutorialData = tutorialRepository.findById(id);
@@ -85,6 +93,7 @@ public class TutorialController {
     }
   }
 
+  @ApiOperation(value = "Delete a tutorial by Id")
   @DeleteMapping("/tutorials/{id}")
   public ResponseEntity<HttpStatus> deleteTutorial(@PathVariable("id") long id) {
     try {
@@ -95,6 +104,7 @@ public class TutorialController {
     }
   }
 
+  @ApiOperation(value = "Delete all tutorials")
   @DeleteMapping("/tutorials")
   public ResponseEntity<HttpStatus> deleteAllTutorials() {
     try {
@@ -106,6 +116,7 @@ public class TutorialController {
 
   }
 
+  @ApiOperation(value = "Find tutorials by published status")
   @GetMapping("/tutorials/published")
   public ResponseEntity<List<Tutorial>> findByPublished() {
     try {

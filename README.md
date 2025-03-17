@@ -95,3 +95,8 @@ Run both Back-end & Front-end in one place:
 mvn spring-boot:run
 ```
 
+## Access Swagger UI
+After running the application, you can access the Swagger UI at:
+```
+http://localhost:8080/swagger-ui/
+```
