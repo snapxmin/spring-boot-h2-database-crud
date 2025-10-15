@@ -63,7 +63,11 @@ public class TutorialController {
   @PostMapping("/tutorials")
   public ResponseEntity<Tutorial> createTutorial(@RequestBody Tutorial tutorial) {
     try {
-      Tutorial _tutorial = tutorialRepository.save(new Tutorial(tutorial.getTitle(), tutorial.getDescription(), false));
+      Tutorial _tutorial = tutorialRepository.save(new Tutorial(
+          tutorial.getTitle(),
+          tutorial.getDescription(),
+          tutorial.getOrigin(),
+          false));
       return new ResponseEntity<>(_tutorial, HttpStatus.CREATED);
     } catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -78,6 +82,7 @@ public class TutorialController {
       Tutorial _tutorial = tutorialData.get();
       _tutorial.setTitle(tutorial.getTitle());
       _tutorial.setDescription(tutorial.getDescription());
+      _tutorial.setOrigin(tutorial.getOrigin());
       _tutorial.setPublished(tutorial.isPublished());
       return new ResponseEntity<>(tutorialRepository.save(_tutorial), HttpStatus.OK);
     } else {
@@ -111,6 +116,19 @@ public class TutorialController {
     try {
       List<Tutorial> tutorials = tutorialRepository.findByPublished(true);
 
+      if (tutorials.isEmpty()) {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+      }
+      return new ResponseEntity<>(tutorials, HttpStatus.OK);
+    } catch (Exception e) {
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @GetMapping("/tutorials/origin/{origin}")
+  public ResponseEntity<List<Tutorial>> findByOrigin(@PathVariable("origin") String origin) {
+    try {
+      List<Tutorial> tutorials = tutorialRepository.findByOriginIgnoreCase(origin);
       if (tutorials.isEmpty()) {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
       }

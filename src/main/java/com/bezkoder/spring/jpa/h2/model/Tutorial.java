@@ -19,6 +19,9 @@ public class Tutorial {
   @Column(name = "published")
   private boolean published;
 
+  @Column(name = "origin")
+  private String origin;
+
   public Tutorial() {
 
   }
@@ -26,6 +29,13 @@ public class Tutorial {
   public Tutorial(String title, String description, boolean published) {
     this.title = title;
     this.description = description;
+    this.published = published;
+  }
+
+  public Tutorial(String title, String description, String origin, boolean published) {
+    this.title = title;
+    this.description = description;
+    this.origin = origin;
     this.published = published;
   }
 
@@ -57,9 +67,17 @@ public class Tutorial {
     this.published = isPublished;
   }
 
+  public String getOrigin() {
+    return origin;
+  }
+
+  public void setOrigin(String origin) {
+    this.origin = origin;
+  }
+
   @Override
   public String toString() {
-    return "Tutorial [id=" + id + ", title=" + title + ", desc=" + description + ", published=" + published + "]";
+    return "Tutorial [id=" + id + ", title=" + title + ", desc=" + description + ", origin=" + origin + ", published=" + published + "]";
   }
 
 }

@@ -10,4 +10,6 @@ public interface TutorialRepository extends JpaRepository<Tutorial, Long> {
   List<Tutorial> findByPublished(boolean published);
 
   List<Tutorial> findByTitleContainingIgnoreCase(String title);
+
+  List<Tutorial> findByOriginIgnoreCase(String origin);
 }
