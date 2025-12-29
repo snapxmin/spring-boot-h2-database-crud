@@ -29,6 +29,17 @@ public class TutorialController {
   @Autowired
   TutorialRepository tutorialRepository;
 
+  private <T> ResponseEntity<T> handleException(Exception e) {
+    return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  private <T> ResponseEntity<List<T>> handleEmptyList(List<T> list) {
+    if (list.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+    return new ResponseEntity<>(list, HttpStatus.OK);
+  }
+
   @GetMapping("/tutorials")
   public ResponseEntity<List<Tutorial>> getAllTutorials(@RequestParam(required = false) String title) {
     try {
@@ -39,13 +50,9 @@ public class TutorialController {
       else
         tutorialRepository.findByTitleContainingIgnoreCase(title).forEach(tutorials::add);
 
-      if (tutorials.isEmpty()) {
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-      }
-
-      return new ResponseEntity<>(tutorials, HttpStatus.OK);
+      return handleEmptyList(tutorials);
     } catch (Exception e) {
-      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+      return handleException(e);
     }
   }
 
@@ -66,7 +73,7 @@ public class TutorialController {
       Tutorial _tutorial = tutorialRepository.save(new Tutorial(tutorial.getTitle(), tutorial.getDescription(), false));
       return new ResponseEntity<>(_tutorial, HttpStatus.CREATED);
     } catch (Exception e) {
-      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+      return handleException(e);
     }
   }
 
@@ -110,13 +117,9 @@ public class TutorialController {
   public ResponseEntity<List<Tutorial>> findByPublished() {
     try {
       List<Tutorial> tutorials = tutorialRepository.findByPublished(true);
-
-      if (tutorials.isEmpty()) {
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-      }
-      return new ResponseEntity<>(tutorials, HttpStatus.OK);
+      return handleEmptyList(tutorials);
     } catch (Exception e) {
-      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+      return handleException(e);
     }
   }
 
