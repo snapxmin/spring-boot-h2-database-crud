@@ -56,11 +56,11 @@ function setupEventListeners() {
 async function loadAllTutorials() {
     try {
         const response = await fetch(API_URL);
-        if (response.ok) {
+        if (response.status === 204) {
+            displayTutorials([]);
+        } else if (response.ok) {
             const tutorials = await response.json();
             displayTutorials(tutorials);
-        } else if (response.status === 204) {
-            displayTutorials([]);
         } else {
             showToast('Failed to load tutorials', 'error');
         }
@@ -73,11 +73,11 @@ async function loadAllTutorials() {
 async function loadPublishedTutorials() {
     try {
         const response = await fetch(`${API_URL}/published`);
-        if (response.ok) {
+        if (response.status === 204) {
+            displayTutorials([]);
+        } else if (response.ok) {
             const tutorials = await response.json();
             displayTutorials(tutorials);
-        } else if (response.status === 204) {
-            displayTutorials([]);
         } else {
             showToast('Failed to load published tutorials', 'error');
         }
@@ -90,11 +90,11 @@ async function loadPublishedTutorials() {
 async function searchTutorials(title) {
     try {
         const response = await fetch(`${API_URL}?title=${encodeURIComponent(title)}`);
-        if (response.ok) {
+        if (response.status === 204) {
+            displayTutorials([]);
+        } else if (response.ok) {
             const tutorials = await response.json();
             displayTutorials(tutorials);
-        } else if (response.status === 204) {
-            displayTutorials([]);
         } else {
             showToast('Failed to search tutorials', 'error');
         }
