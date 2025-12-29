@@ -302,20 +302,21 @@ function showModal(title, message) {
     modalTitle.textContent = title;
     modalMessage.textContent = message;
     modal.style.display = 'block';
-    
-    modalConfirm.onclick = () => {
-        if (deleteCallback) {
-            deleteCallback();
-            deleteCallback = null;
-        }
-        closeModal();
-    };
 }
 
 function closeModal() {
     modal.style.display = 'none';
     deleteCallback = null;
 }
+
+// Modal confirm handler
+modalConfirm.addEventListener('click', () => {
+    if (deleteCallback) {
+        deleteCallback();
+        deleteCallback = null;
+    }
+    closeModal();
+});
 
 // Close modal when clicking outside
 window.addEventListener('click', (e) => {
