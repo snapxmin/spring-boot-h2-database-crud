@@ -114,7 +114,6 @@ public class TutorialController {
     } catch (Exception e) {
       return handleDeleteException(e);
     }
-
   }
 
   @GetMapping("/tutorials/published")
