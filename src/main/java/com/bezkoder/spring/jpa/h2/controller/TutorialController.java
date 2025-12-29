@@ -33,6 +33,10 @@ public class TutorialController {
     return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
+  private ResponseEntity<HttpStatus> handleDeleteException(Exception e) {
+    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
   private <T> ResponseEntity<List<T>> handleEmptyList(List<T> list) {
     if (list.isEmpty()) {
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -98,7 +102,7 @@ public class TutorialController {
       tutorialRepository.deleteById(id);
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     } catch (Exception e) {
-      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+      return handleDeleteException(e);
     }
   }
 
@@ -108,7 +112,7 @@ public class TutorialController {
       tutorialRepository.deleteAll();
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     } catch (Exception e) {
-      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+      return handleDeleteException(e);
     }
 
   }
