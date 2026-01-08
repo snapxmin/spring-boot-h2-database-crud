@@ -59,16 +59,20 @@ public class TutorialController {
 
   @GetMapping("/tutorials/{id}")
   public ResponseEntity<Tutorial> getTutorialById(@PathVariable("id") long id) {
-    return tutorialRepository.findById(id)
-        .map(tutorial -> new ResponseEntity<>(tutorial, HttpStatus.OK))
-        .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    try {
+      return tutorialRepository.findById(id)
+          .map(tutorial -> new ResponseEntity<>(tutorial, HttpStatus.OK))
+          .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    } catch (Exception e) {
+      return handleException(e);
+    }
   }
 
   @PostMapping("/tutorials")
   public ResponseEntity<Tutorial> createTutorial(@RequestBody Tutorial tutorial) {
     try {
-      tutorial.setPublished(false);
-      Tutorial savedTutorial = tutorialRepository.save(tutorial);
+      Tutorial newTutorial = new Tutorial(tutorial.getTitle(), tutorial.getDescription(), false);
+      Tutorial savedTutorial = tutorialRepository.save(newTutorial);
       return new ResponseEntity<>(savedTutorial, HttpStatus.CREATED);
     } catch (Exception e) {
       return handleException(e);
@@ -77,14 +81,18 @@ public class TutorialController {
 
   @PutMapping("/tutorials/{id}")
   public ResponseEntity<Tutorial> updateTutorial(@PathVariable("id") long id, @RequestBody Tutorial tutorial) {
-    return tutorialRepository.findById(id)
-        .map(existingTutorial -> {
-          existingTutorial.setTitle(tutorial.getTitle());
-          existingTutorial.setDescription(tutorial.getDescription());
-          existingTutorial.setPublished(tutorial.isPublished());
-          return new ResponseEntity<>(tutorialRepository.save(existingTutorial), HttpStatus.OK);
-        })
-        .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    try {
+      return tutorialRepository.findById(id)
+          .map(existingTutorial -> {
+            existingTutorial.setTitle(tutorial.getTitle());
+            existingTutorial.setDescription(tutorial.getDescription());
+            existingTutorial.setPublished(tutorial.isPublished());
+            return new ResponseEntity<>(tutorialRepository.save(existingTutorial), HttpStatus.OK);
+          })
+          .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    } catch (Exception e) {
+      return handleException(e);
+    }
   }
 
   @DeleteMapping("/tutorials/{id}")
