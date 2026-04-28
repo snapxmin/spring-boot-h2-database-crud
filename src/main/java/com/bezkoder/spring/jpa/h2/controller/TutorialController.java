@@ -21,6 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bezkoder.spring.jpa.h2.model.Tutorial;
 import com.bezkoder.spring.jpa.h2.repository.TutorialRepository;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "Tutorial", description = "Tutorial management APIs")
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping("/api")
@@ -29,6 +37,14 @@ public class TutorialController {
   @Autowired
   TutorialRepository tutorialRepository;
 
+  @Operation(
+      summary = "Retrieve all Tutorials",
+      description = "Get all Tutorial objects. You can optionally filter by title.",
+      tags = { "tutorials", "get" })
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = Tutorial.class), mediaType = "application/json") }),
+      @ApiResponse(responseCode = "204", description = "No tutorials found", content = { @Content(schema = @Schema()) }),
+      @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
   @GetMapping("/tutorials")
   public ResponseEntity<List<Tutorial>> getAllTutorials(@RequestParam(required = false) String title) {
     try {
@@ -49,6 +65,14 @@ public class TutorialController {
     }
   }
 
+  @Operation(
+      summary = "Retrieve a Tutorial by Id",
+      description = "Get a Tutorial object by specifying its id.",
+      tags = { "tutorials", "get" })
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = Tutorial.class), mediaType = "application/json") }),
+      @ApiResponse(responseCode = "404", description = "Tutorial not found", content = { @Content(schema = @Schema()) }),
+      @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
   @GetMapping("/tutorials/{id}")
   public ResponseEntity<Tutorial> getTutorialById(@PathVariable("id") long id) {
     Optional<Tutorial> tutorialData = tutorialRepository.findById(id);
@@ -60,6 +84,13 @@ public class TutorialController {
     }
   }
 
+  @Operation(
+      summary = "Create a new Tutorial",
+      description = "Create a new Tutorial object. The tutorial will be created as unpublished by default.",
+      tags = { "tutorials", "post" })
+  @ApiResponses({
+      @ApiResponse(responseCode = "201", content = { @Content(schema = @Schema(implementation = Tutorial.class), mediaType = "application/json") }),
+      @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
   @PostMapping("/tutorials")
   public ResponseEntity<Tutorial> createTutorial(@RequestBody Tutorial tutorial) {
     try {
@@ -70,6 +101,14 @@ public class TutorialController {
     }
   }
 
+  @Operation(
+      summary = "Update a Tutorial by Id",
+      description = "Update a Tutorial object by specifying its id.",
+      tags = { "tutorials", "put" })
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = Tutorial.class), mediaType = "application/json") }),
+      @ApiResponse(responseCode = "404", description = "Tutorial not found", content = { @Content(schema = @Schema()) }),
+      @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
   @PutMapping("/tutorials/{id}")
   public ResponseEntity<Tutorial> updateTutorial(@PathVariable("id") long id, @RequestBody Tutorial tutorial) {
     Optional<Tutorial> tutorialData = tutorialRepository.findById(id);
@@ -85,6 +124,13 @@ public class TutorialController {
     }
   }
 
+  @Operation(
+      summary = "Delete a Tutorial by Id",
+      description = "Delete a Tutorial object by specifying its id.",
+      tags = { "tutorials", "delete" })
+  @ApiResponses({
+      @ApiResponse(responseCode = "204", description = "Tutorial deleted successfully"),
+      @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
   @DeleteMapping("/tutorials/{id}")
   public ResponseEntity<HttpStatus> deleteTutorial(@PathVariable("id") long id) {
     try {
@@ -95,6 +141,13 @@ public class TutorialController {
     }
   }
 
+  @Operation(
+      summary = "Delete all Tutorials",
+      description = "Delete all Tutorial objects from the database.",
+      tags = { "tutorials", "delete" })
+  @ApiResponses({
+      @ApiResponse(responseCode = "204", description = "All tutorials deleted successfully"),
+      @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
   @DeleteMapping("/tutorials")
   public ResponseEntity<HttpStatus> deleteAllTutorials() {
     try {
@@ -106,6 +159,14 @@ public class TutorialController {
 
   }
 
+  @Operation(
+      summary = "Retrieve all Published Tutorials",
+      description = "Get all Tutorial objects that are marked as published.",
+      tags = { "tutorials", "get" })
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = Tutorial.class), mediaType = "application/json") }),
+      @ApiResponse(responseCode = "204", description = "No published tutorials found", content = { @Content(schema = @Schema()) }),
+      @ApiResponse(responseCode = "500", content = { @Content(schema = @Schema()) }) })
   @GetMapping("/tutorials/published")
   public ResponseEntity<List<Tutorial>> findByPublished() {
     try {

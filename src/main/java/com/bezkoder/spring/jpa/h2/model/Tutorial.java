@@ -1,21 +1,27 @@
 package com.bezkoder.spring.jpa.h2.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
+@Schema(description = "Tutorial model representing a learning resource")
 @Entity
 @Table(name = "tutorials")
 public class Tutorial {
 
+  @Schema(description = "Unique identifier of the Tutorial", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
 
+  @Schema(description = "Title of the Tutorial", example = "Spring Boot Tutorial", required = true)
   @Column(name = "title")
   private String title;
 
+  @Schema(description = "Detailed description of the Tutorial", example = "Learn Spring Boot framework from scratch")
   @Column(name = "description")
   private String description;
 
+  @Schema(description = "Publication status of the Tutorial", example = "false")
   @Column(name = "published")
   private boolean published;
 
